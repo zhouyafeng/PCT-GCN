@@ -1,0 +1,52 @@
+work_dir: ./work_dir/ntu60_xsub/km
+
+train_feeder_args:
+  data_path: datasets/processed/NTU60_CS
+  window_size: 64
+  random_rot: True
+  p_interval: [0.5, 1]
+  vel: True
+  bone: True
+  bone_topology: kbone
+
+val_feeder_args:
+  data_path: datasets/processed/NTU60_CS
+  split: test
+  window_size: 64
+  p_interval: [0.95]
+  vel: True
+  bone: True
+  bone_topology: kbone
+
+model: model.pctgcn.Model
+model_args:
+  num_class: 60
+  num_point: 25
+  num_person: 2
+  graph: graph.ntu_rgb_d.Graph
+  graph_args:
+    labeling_mode: "normalized_spatial_k8"
+  route_window: 8
+  embedding_channels: 128
+  channels_scale: 4
+  num_subset: 8
+  rel_reduction: 4
+  topk: 9
+
+loss: model.loss.pctgcn_loss.CrossEntropyOrthogonalLoss
+loss_args:
+  label_smoothing: 0.1
+  orth_weight: 0.05
+
+weight_decay: 0.0004
+base_lr: 0.05
+step: [110, 120]
+param_group_wd_mult:
+  - patterns: [alpha_s]
+    wd_mult: 1.0
+  - patterns: [alpha]
+    wd_mult: 0.0
+
+num_epoch: 140
+save_epoch: 55
+eval_epoch: 110
