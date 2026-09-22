@@ -1,0 +1,8 @@
+# ------ ignore normal --------------------------------------------------------
+# Ignore specific folder names
+.*/
+
+__pycache__/
+
+datasets
+work_dir
